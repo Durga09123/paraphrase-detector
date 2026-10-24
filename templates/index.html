@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Paraphrase Detector</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; padding: 32px 16px;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, #fce4f1, #e8eaff);
+      color: #2b2b3a; display: flex; justify-content: center;
+    }
+    .card {
+      width: 100%; max-width: 640px; background: #fff; border-radius: 18px;
+      padding: 32px; box-shadow: 0 12px 40px rgba(80, 60, 140, .15);
+      align-self: flex-start;
+    }
+    h1 { margin: 0 0 6px; font-size: 28px; }
+    .sub { margin: 0 0 24px; color: #6b6b80; }
+    label { display: block; font-weight: 600; margin: 16px 0 6px; }
+    textarea {
+      width: 100%; min-height: 80px; padding: 12px; font: inherit; resize: vertical;
+      border: 1.5px solid #dcdcec; border-radius: 10px; background: #f6f6fb;
+    }
+    textarea:focus { outline: none; border-color: #7b5cff; background: #fff; }
+    button {
+      margin-top: 20px; padding: 11px 22px; font: inherit; font-weight: 600;
+      color: #fff; background: #7b5cff; border: 0; border-radius: 10px; cursor: pointer;
+    }
+    button:hover { background: #6847f0; }
+    h2 { font-size: 18px; margin: 28px 0 10px; }
+    .bar { height: 12px; background: #ececf6; border-radius: 99px; overflow: hidden; }
+    .fill { height: 100%; background: linear-gradient(90deg, #7b5cff, #3aa0ff); }
+    .score { margin: 8px 0 0; font-weight: 700; }
+    .msg { padding: 12px 14px; border-radius: 10px; font-weight: 600; }
+    .ok   { background: #e6f7ec; color: #1b7a3d; }
+    .bad  { background: #fde8e8; color: #b42323; }
+    .warn { background: #fff4dc; color: #8a5a00; margin-top: 16px; }
+    details { margin-top: 18px; color: #6b6b80; font-size: 14px; }
+    code { background: #f0f0f8; padding: 2px 6px; border-radius: 5px; }
+    footer { margin-top: 28px; padding-top: 14px; border-top: 1px solid #ececf6;
+             font-size: 13px; color: #8a8aa0; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🧠 Paraphrase Detector</h1>
+    <p class="sub">Enter two sentences to check whether they have similar meaning.</p>
+
+    <form method="POST" action="/">
+      <label for="sentence1">Sentence 1</label>
+      <textarea id="sentence1" name="sentence1"
+                placeholder="Example: I like playing football.">{{ sentence1 }}</textarea>
+
+      <label for="sentence2">Sentence 2</label>
+      <textarea id="sentence2" name="sentence2"
+                placeholder="Example: I enjoy playing football.">{{ sentence2 }}</textarea>
+
+      <button type="submit">🔍 Check Paraphrase</button>
+    </form>
+
+    {% if error %}
+      <div class="msg warn">{{ error }}</div>
+    {% endif %}
+
+    {% if result %}
+      <h2>📊 Similarity Score</h2>
+      <div class="bar"><div class="fill" style="width: {{ percentage }}%"></div></div>
+      <p class="score">Similarity: {{ '%.2f' % percentage }}%</p>
+
+      <h2>🎯 Result</h2>
+      {% if result == "Paraphrase" %}
+        <div class="msg ok">✅ These sentences are Paraphrases!</div>
+      {% else %}
+        <div class="msg bad">❌ These sentences are NOT Paraphrases.</div>
+      {% endif %}
+
+      <details>
+        <summary>Show pre-processed text</summary>
+        <p>Sentence 1 → <code>{{ p1 }}</code></p>
+        <p>Sentence 2 → <code>{{ p2 }}</code></p>
+      </details>
+    {% endif %}
+
+    <footer>Paraphrase Detection using NLP | WordNet + TF-IDF + Cosine Similarity</footer>
+  </div>
+</body>
+</html>
